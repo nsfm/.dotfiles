@@ -16,7 +16,7 @@ Plus some scripts.
 ## Installation
 ```bash
 cd ~
-git clone https://github.com/nsfm/dotfiles .dotfiles
+git clone https://github.com/nsfm/.dotfiles
 stow --dotfiles -d .dotfiles .
 ```
 
