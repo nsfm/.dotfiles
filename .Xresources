@@ -1,0 +1,83 @@
+!! Xft settings
+Xft.dpi: 150
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.hinting: true
+Xft.hintstyle: hintslight
+
+! #cfcfcf
+! special
+*foreground:   #cfcfcf
+*background:   #f3f3f3
+*cursorColor:  #444444
+
+! black
+*color0:       #d0d0d0
+*color8:       #aeaeae
+
+! red
+*color1:       #c94e5c
+*color9:       #c94e5c
+
+! green
+*color2:       #82b85a
+*color10:      #82b85a
+
+! yellow
+*color3:       #d58a5a
+*color11:      #d58a5a
+
+! blue
+*color4:       #4c6fd6
+*color12:      #4c6fd6
+
+! magenta
+*color5:       #ac4fd6
+*color13:      #ac4fd6
+
+! cyan
+*color6:       #3e77bd
+*color14:      #3e77bd
+
+! white
+*color7:       #444444
+*color15:      #444444
+
+!! Fonts
+*font: xft:Operator Mono Book::size=10,xft:Source Code Pro for Powerline:size=10,xft:FontAwesome:size=10,
+*boldFont: xft:Operator Mono Bold::size=10,xft:Source Code Pro for Powerline:size=10,xft:FontAwesome:size=10,
+
+!! Urxvt
+!!URxvt*depth: 32
+URxvt*geometry: 100x30
+URxvt*loginShell: true
+URxvt*internalBorder: 0
+URxvt*intensityStyles: false
+URxvt*borderless:       true
+URxvt*lineSpace: 0
+URxvt*saveLines: 25000
+URxvt*perl-ext-common: default,resize-font
+URxvt*letterSpace: -1
+URxvt*scrollBar_right: true
+URxvt*scrollBar:  false
+URxvt*scrollTtyOutput:  false
+URxvt*scrollTtyKeypress: true
+URxvt*fading: 0
+URxvt*inheritPixMap: true
+URxvt*transparent: true
+URxvt*shading: 30
+
+!! Xterm
+xterm*VT100.geometry: 80x25
+xterm*dynamicColors: true
+xterm*utf8: 2
+xterm*eightBitInput: true
+xterm*saveLines: 512
+xterm*scrollKey: true
+xterm*scrollTtyOutput: false
+xterm*scrollBar: true
+xterm*rightScrollBar: true
+xterm*jumpScroll: true
+xterm*multiScroll: true
+xterm*toolBar: false
+

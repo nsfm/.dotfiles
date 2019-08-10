@@ -1,0 +1,242 @@
+set belloff=all
+set number
+set mouse=a
+set nocompatible
+set autoindent
+set expandtab
+set smarttab
+set shiftwidth=2
+set softtabstop=2
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set confirm
+set cmdheight=2
+set hidden
+set showcmd
+set nostartofline
+set ruler
+set laststatus=2
+set showtabline=1
+set noshowmode
+set statusline+=%F
+set conceallevel=0
+set directory=~/.vim/tmp
+set t_Co=256
+set ttymouse=sgr
+set encoding=utf-8
+set clipboard=unnamedplus
+set termguicolors
+set background=light
+
+" Specify a directory for Plug plugins.
+call plug#begin('~/.vim/plugged')
+
+" ES6 Javascript syntax support.
+Plug 'othree/yajs.vim'
+" Deoplete for live autocompletion.
+Plug 'Shougo/deoplete.nvim'
+" Deoplete dependencies.
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+" Javascript plugin for Deoplete.
+Plug 'wokalski/autocomplete-flow'
+" For function argument completion.
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+" For automatic Javascript formatting.
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+" For static analysis of Javascript
+Plug 'ternjs/tern_for_vim', { 'do': 'yarn install' }
+" Airline.
+Plug 'vim-airline/vim-airline'
+" CSV integrations for Airline.
+Plug 'chrisbra/csv.vim'
+" Themes for Airline.
+Plug 'vim-airline/vim-airline-themes'
+" Python formatting and autocompletion.
+Plug 'zchee/deoplete-jedi'
+" JSDoc formatting and helpers.
+Plug 'heavenshell/vim-jsdoc'
+" Make Gvim themes work in the terminal.
+Plug 'godlygeek/csapprox'
+" Themes.
+Plug 'fcpg/vim-farout'
+Plug 'NLKNguyen/papercolor-theme'
+" Why isn't this feature built in? Shows the index of the highlighted search result.
+Plug 'google/vim-searchindex'
+" Linting.
+Plug 'w0rp/ale'
+" Git diff integration.
+Plug 'airblade/vim-gitgutter'
+" Python linting.
+Plug 'nvie/vim-flake8'
+" More python linting.
+Plug 'ambv/black'
+" Eslint formatting.
+Plug 'ruanyl/vim-fixmyjs'
+
+Plug 'pangloss/vim-javascript'
+Plug 'elzr/vim-json'
+
+" :PlugInstall to reload these plugins.
+" :PlugUpdate to update.
+
+" Load native Vim plugins.
+packloadall
+
+" Map ctrl-a to select all.
+map <C-a> <esc>ggVG<CR>
+
+" Set the theme. (airline-themes)
+let g:airline_theme='papercolor'
+let g:airline_powerline_fonts = 1
+
+filetype off
+" Parameters for special kinds of files
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
+autocmd Filetype c set ts=2 sw=2 expandtab
+autocmd Filetype cpp set ts=2 sw=2 expandtab
+autocmd Filetype gitcommit set spell textwidth=72
+autocmd Filetype json set ts=2 sw=2 expandtab
+autocmd Filetype python set ts=4 sw=4 expandtab textWidth=79
+autocmd BufNewFile,BufRead *.hbs set syntax=html
+autocmd BufNewFile,BufRead *.scss set syntax=css
+
+" Syntax highlighting on
+syntax enable
+
+" ALE Configuration
+let g:ale_linters = {'javascript': ['eslint']}
+let g:ale_enabled = 1
+let g:ale_lint_on_insert_leave = 1
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+let g:ale_completion_enabled = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_linters_explicit = 1
+
+" Stop formatting JSON in an obnoxious way.
+let g:vim_json_syntax_conceal = 0
+
+" Filetype detection on
+filetype on
+filetype plugin on
+filetype indent on
+filetype plugin indent on
+
+let g:cpp_class_scope_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+
+" Highlight lines that exceed 120 characters in length
+" execute "set cc=".join(range(81,300), ',')
+hi ColorColumn cterm=bold ctermbg=233
+hi SpellBad ctermbg=052
+hi SpellCap ctermbg=052
+hi SignColumn ctermbg=232
+
+" Rainbow parenthesis configuration.
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3']
+    \ ]
+
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+
+" Disable the godforsaken beeping.
+set noerrorbells visualbell t_vb=
+if has('autocmd')
+  autocmd GUIEnter * set visualbell t_vb=
+endif
+
+" Enable Deoplete.
+let g:deoplete#enable_at_startup = 1
+" Close the scratch window after fixing the issue.
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" Deoplete tab-complete.
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" Enable Neosnippet.
+let g:neosnippet#enable_completed_snippet = 1
+" Insert parenthesis when completing a function name.
+let g:autocomplete_flow#insert_paren_after_function = 1
+
+" Deoplete configuration.
+let g:deoplete#enable_yarp = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#max_processes = 2
+
+" Prettier configuration.
+"let g:prettier#config#print_width = 120
+"let g:prettier#config#tab_width = 2
+"let g:prettier#config#use_tabs = 'false'
+"let g:prettier#config#semi = 'false'
+let g:prettier#config#single_quote = 'false'
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#config#jsx_bracket_same_line = 'false'
+let g:prettier#config#arrow_parens = 'avoid'
+let g:prettier#config#trailing_comma = 'none'
+let g:prettier#config#parser = 'flow'
+let g:prettier#config#config_precedence = 'prefer-file'
+let g:prettier#config#prose_wrap = 'preserve'
+
+" JsDoc configuration.
+let g:jsdoc_allow_input_prompt = 1
+let g:jsdoc_enable_es6 = 1
+let g:jsdoc_input_description = 1
+
+" Python Lint (Black)
+autocmd BufWritePre *.py execute ':Black'
+
+" Run Prettier before every save in the following file types.
+let g:prettier#autoformat = 1
+autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
+
+" Run Fixmyjs before every save in the following file types.
+" autocmd BufWritePre, *.js,*.jsx :Fixmyjs
+
+" Initialize plugin system.
+call plug#end()
+
+" Set colorscheme.
+" colorscheme farout
+"let ayucolor="light"
+"colorscheme ayu
+
+let g:PaperColor_Theme_Options = {
+  \   'theme': {
+  \     'default.light': {
+  \       'transparent_background': 1,
+  \       'allow_bold': 1,
+  \       'allow_italic': 1
+  \     }
+  \   }
+  \ }
+colorscheme PaperColor
+
+" Then override parenthesis.
+"au VimEnter * RainbowParenthesesToggle
+"au Syntax * RainbowParenthesesLoadRound
+"au Syntax * RainbowParenthesesLoadSquare
+"au Syntax * RainbowParenthesesLoadBraces
+
+" Italic comments.
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
+highlight Comment cterm=italic
+
