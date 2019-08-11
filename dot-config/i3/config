@@ -21,7 +21,7 @@ exec --no-startup-id autocutsel -selection PRIMARY -fork &
 exec --no-startup-id volctl &
 exec --no-startup-id nm-applet &
 
-bindsym $super+Shift+Return exec urxvt
+bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
 bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=8'"
 bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 8'
