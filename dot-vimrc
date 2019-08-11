@@ -23,11 +23,10 @@ set noshowmode
 set statusline+=%F
 set conceallevel=0
 set directory=~/.vim/tmp
-set t_Co=256
+set t_Co=16
 set ttymouse=sgr
 set encoding=utf-8
 set clipboard=unnamedplus
-set termguicolors
 set background=light
 
 " Specify a directory for Plug plugins.
@@ -59,11 +58,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'zchee/deoplete-jedi'
 " JSDoc formatting and helpers.
 Plug 'heavenshell/vim-jsdoc'
-" Make Gvim themes work in the terminal.
-Plug 'godlygeek/csapprox'
-" Themes.
-Plug 'fcpg/vim-farout'
-Plug 'NLKNguyen/papercolor-theme'
 " Why isn't this feature built in? Shows the index of the highlighted search result.
 Plug 'google/vim-searchindex'
 " Linting.
@@ -76,7 +70,6 @@ Plug 'nvie/vim-flake8'
 Plug 'ambv/black'
 " Eslint formatting.
 Plug 'ruanyl/vim-fixmyjs'
-
 Plug 'pangloss/vim-javascript'
 Plug 'elzr/vim-json'
 
@@ -89,8 +82,6 @@ packloadall
 " Map ctrl-a to select all.
 map <C-a> <esc>ggVG<CR>
 
-" Set the theme. (airline-themes)
-let g:airline_theme='papercolor'
 let g:airline_powerline_fonts = 1
 
 filetype off
@@ -176,7 +167,6 @@ let g:neosnippet#enable_completed_snippet = 1
 " Insert parenthesis when completing a function name.
 let g:autocomplete_flow#insert_paren_after_function = 1
 
-" Deoplete configuration.
 let g:deoplete#enable_yarp = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#max_processes = 2
@@ -194,13 +184,10 @@ let g:prettier#config#trailing_comma = 'none'
 let g:prettier#config#parser = 'flow'
 let g:prettier#config#config_precedence = 'prefer-file'
 let g:prettier#config#prose_wrap = 'preserve'
-
-" JsDoc configuration.
 let g:jsdoc_allow_input_prompt = 1
 let g:jsdoc_enable_es6 = 1
 let g:jsdoc_input_description = 1
 
-" Python Lint (Black)
 autocmd BufWritePre *.py execute ':Black'
 
 " Run Prettier before every save in the following file types.
@@ -210,24 +197,7 @@ autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*
 " Run Fixmyjs before every save in the following file types.
 " autocmd BufWritePre, *.js,*.jsx :Fixmyjs
 
-" Initialize plugin system.
 call plug#end()
-
-" Set colorscheme.
-" colorscheme farout
-"let ayucolor="light"
-"colorscheme ayu
-
-let g:PaperColor_Theme_Options = {
-  \   'theme': {
-  \     'default.light': {
-  \       'transparent_background': 1,
-  \       'allow_bold': 1,
-  \       'allow_italic': 1
-  \     }
-  \   }
-  \ }
-colorscheme PaperColor
 
 " Then override parenthesis.
 "au VimEnter * RainbowParenthesesToggle
