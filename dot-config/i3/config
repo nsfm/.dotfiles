@@ -15,7 +15,7 @@ floating_modifier $super
 exec --no-startup-id feh --bg-scale /home/nate/wallpapers/pinkish_blur.png
 exec --no-startup-id xsettingsd &
 exec --no-startup-id compton -b
-exec --no-startup-id compton &
+exec --no-startup-id rfkill block bluetooth
 exec --no-startup-id clight --device=video2 &
 exec --no-startup-id autocutsel -selection PRIMARY -fork &
 exec --no-startup-id volctl &
