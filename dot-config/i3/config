@@ -6,25 +6,32 @@ floating_minimum_size 300x600
 floating_maximum_size 600x1200
 
 # set font
-font pango: Noto Sans 8
+font pango: Operator Mono Light 8
 
-# Use Mouse+$super to drag floating windows to their wanted position
+# Mod + drag to float windows
 floating_modifier $super
 
-#autostart
-exec --no-startup-id feh --bg-scale /home/nate/wallpapers/pinkish_blur.png
+# Set the wallpaper to yesterday's; when today's is ready, update it.
+set $wallpaper_path ~/.wallpaper_generator/
+exec --no-startup-id feh --bg-scale $wallpaper_path/bg.png
+exec --no-startup-id yarn --cwd $wallpaper_path start && feh --bg-scale $wallpaper_path/bg.png
+
 exec --no-startup-id xsettingsd &
 exec --no-startup-id compton -b
-exec --no-startup-id rfkill block bluetooth
 exec --no-startup-id clight --device=video2 &
 exec --no-startup-id autocutsel -selection PRIMARY -fork &
 exec --no-startup-id volctl &
 exec --no-startup-id nm-applet &
 
+# Power saving.
+exec --no-startup-id rfkill block bluetooth
+exec --no-startup-id ~/.disable_audio_pin.sh
+exec --no-startup-id ~/.disable_memory_card_reader.sh
+
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
-bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=8'"
-bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 8'
+bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Operator Mono Bold:size=8'"
+bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Operator Mono Bold 12'
 bindsym Print exec scrot 'screenshot_%a-%d%b%y_%H.%M.png' -e 'viewnior $f'
 bindsym $super+l exec ~/.lock.sh
 

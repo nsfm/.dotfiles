@@ -1,0 +1,17 @@
+{
+  "name": "dot-wallpaper_generator",
+  "version": "0.0.0",
+  "description": "Generates colorful, blurry wallpapers.",
+  "main": "index.js",
+  "repository": "https://github.com/nsfm/.dotfiles",
+  "author": "Nate Dube",
+  "license": "GPL-2.0-or-later",
+  "private": false,
+  "dependencies": {
+    "sharp": "^0.23.0",
+    "trianglify": "^2.0.0"
+  },
+  "scripts": {
+    "start": "node index.js > bg.png"
+  }
+}
