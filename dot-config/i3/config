@@ -35,10 +35,14 @@ bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -sh
 bindsym Print exec scrot 'screenshot_%a-%d%b%y_%H.%M.png' -e 'viewnior $f'
 bindsym $super+l exec ~/.lock.sh
 
-#change volume
+# Adjust volume from hotkeys.
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+
 bindsym XF86AudioLowerVolume exec amixer -q set Master 5%-
 bindsym XF86AudioMute exec amixer set Master toggle
+
+# Adjust brightness from hotkeys.
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
 # kill focused window
 bindsym $super+x kill
