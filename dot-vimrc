@@ -28,6 +28,8 @@ set ttymouse=sgr
 set encoding=utf-8
 set clipboard=unnamedplus
 set background=light
+set shortmess=I
+set mat=5
 
 " Specify a directory for Plug plugins.
 call plug#begin('~/.vim/plugged')
