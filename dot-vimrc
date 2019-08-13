@@ -23,7 +23,7 @@ set noshowmode
 set statusline+=%F
 set conceallevel=0
 set directory=~/.vim/tmp
-set t_Co=16
+set t_Co=256
 set ttymouse=sgr
 set encoding=utf-8
 set clipboard=unnamedplus
