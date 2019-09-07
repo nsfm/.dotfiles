@@ -22,6 +22,8 @@ autoload bashcompinit
 bashcompinit
 # pacman -S zsh-syntax-highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# pacman -S zsh-autosuggestions
+# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Disable godforsaken PC beeping.
 xset -b

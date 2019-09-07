@@ -29,8 +29,11 @@ exec --no-startup-id xsettingsd &
 # Compositor.
 exec --no-startup-id compton -b
 
+# Notification Server.
+exec --no-startup-id dunst
+
 # Applets.
-exec --no-startup-id volctl &
+exec --no-startup-id volnoti &
 exec --no-startup-id nm-applet &
 
 # Power saving.
@@ -45,10 +48,13 @@ bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -sh
 bindsym Print exec scrot 'screenshot_%a-%d%b%y_%H.%M.png' -e 'viewnior $f'
 bindsym $super+l exec ~/.lock.sh
 
-# Adjust volume from hotkeys.
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+
-bindsym XF86AudioLowerVolume exec amixer -q set Master 5%-
-bindsym XF86AudioMute exec amixer set Master toggle
+# Adjust volume with hotkeys and show a volume indicator.
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ && \
+  volnoti-show $(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
+bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- && \
+  volnoti-show $(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
+
+bindsym XF86AudioMute exec --no-startup-id "amixer set Master toggle && if amixer get Master | grep -Fq '[off]'; then volnoti-show -m $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); else volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); fi"
 
 # Adjust brightness from hotkeys.
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
