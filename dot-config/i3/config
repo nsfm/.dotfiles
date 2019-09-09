@@ -41,6 +41,9 @@ exec --no-startup-id rfkill block bluetooth
 exec --no-startup-id ~/.disable_audio_pin.sh
 exec --no-startup-id ~/.disable_memory_card_reader.sh
 
+# Lock on screensaver, suspend.
+exec --no-startup-id xss-lock -l i3lock -n ~/.lock.sh &
+
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
 bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Operator Mono Bold:size=8'"
