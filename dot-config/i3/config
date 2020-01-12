@@ -42,7 +42,7 @@ exec --no-startup-id ~/.scripts/disable_audio_pin.sh
 exec --no-startup-id ~/.scripts/disable_memory_card_reader.sh
 
 # Lock on screensaver, suspend.
-exec --no-startup-id xss-lock -l ~/.scripts/lock.sh -n ~/.scripts/lock.sh &
+exec --no-startup-id xss-lock -n ~/.scripts/lock.sh -l ~/.scripts/lock.sh &
 
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
