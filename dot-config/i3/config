@@ -2,8 +2,8 @@
 set $super Mod4
 set $alt Mod1
 
-floating_minimum_size 300x600
-floating_maximum_size 600x1200
+floating_minimum_size 50x50
+floating_maximum_size 10000x10000
 
 # set font
 font pango: Operator Mono Light 8
@@ -38,18 +38,18 @@ exec --no-startup-id nm-applet &
 
 # Power saving.
 exec --no-startup-id rfkill block bluetooth
-exec --no-startup-id ~/.disable_audio_pin.sh
-exec --no-startup-id ~/.disable_memory_card_reader.sh
+exec --no-startup-id ~/.scripts/disable_audio_pin.sh
+exec --no-startup-id ~/.scripts/disable_memory_card_reader.sh
 
 # Lock on screensaver, suspend.
-exec --no-startup-id xss-lock -l i3lock -n ~/.lock.sh &
+exec --no-startup-id xss-lock -l ~/.scripts/lock.sh -n ~/.scripts/lock.sh &
 
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
 bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Operator Mono Bold:size=8'"
 bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Operator Mono Bold 12'
 bindsym Print exec scrot 'screenshot_%a-%d%b%y_%H.%M.png' -e 'viewnior $f'
-bindsym $super+l exec ~/.lock.sh
+bindsym $super+l exec ~/.scripts/lock.sh
 
 # Adjust volume with hotkeys and show a volume indicator.
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ && \
@@ -158,6 +158,9 @@ bar {
 # window rules, you can find the window class using xprop
 for_window [class=".*"] border pixel 0
 for_window [class=URxvt|Pavucontrol] focus
+#for_window [class=kitty] border_radius 15
+
+#border_radius 15
 
 # colour of border, background, text, indicator, and child_border
 client.focused			#bf616a #2f343f #d8dee8 #bf616a #d8dee8
