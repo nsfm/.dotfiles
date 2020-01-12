@@ -36,11 +36,6 @@ call plug#begin('~/.vim/plugged')
 
 " ES6 Javascript syntax support.
 Plug 'othree/yajs.vim'
-" Deoplete for live autocompletion.
-Plug 'Shougo/deoplete.nvim'
-" Deoplete dependencies.
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
 " Javascript plugin for Deoplete.
 Plug 'wokalski/autocomplete-flow'
 " For function argument completion.
@@ -66,10 +61,6 @@ Plug 'google/vim-searchindex'
 Plug 'w0rp/ale'
 " Git diff integration.
 Plug 'airblade/vim-gitgutter'
-" Python linting.
-Plug 'nvie/vim-flake8'
-" More python linting.
-Plug 'ambv/black'
 " Eslint formatting.
 Plug 'ruanyl/vim-fixmyjs'
 Plug 'pangloss/vim-javascript'
