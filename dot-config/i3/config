@@ -11,13 +11,12 @@ font pango: Operator Mono Light 8
 # Mod + drag to float windows
 floating_modifier $super
 
-# Set the wallpaper; generate a new one for tomorrow.
-set $wallpaper_path ~/.wallpaper_generator/
-exec --no-startup-id feh --bg-scale $wallpaper_path/bg.png
-exec --no-startup-id yarn --cwd $wallpaper_path start && feh --bg-scale $wallpaper_path/bg.png
+# Set the wallpaper to last boot's, then start generating a new one.
+exec --no-startup-id feh --bg-center ~/.wallpapers/bg.png
+exec --no-startup-id yarn --cwd ~/.scripts/wallpaper_generator start
 
 # Use webcam to keep backlight reasonable.
-exec --no-startup-id clight --device=video2 &
+# exec --no-startup-id clight --device=video2 &
 
 # Synchronize clipboards.
 exec --no-startup-id autocutsel -fork &

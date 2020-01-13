@@ -20,8 +20,10 @@ bindkey '^F' edit-command-line;
 zmodload zsh/mathfunc
 autoload bashcompinit
 bashcompinit
+
 # pacman -S zsh-syntax-highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # pacman -S zsh-autosuggestions
 # source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -29,6 +31,7 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 xset -b
 unsetopt beep
 
+# Borrowed this from somewhere.
 extract () {
   if [ -f $1 ] ; then
     case $1 in
@@ -52,9 +55,6 @@ extract () {
 
 alias ls="ls -Fhv --color=auto --group-directories-first"
 alias diff="colordiff"
-alias alsa="alsamixer"
-alias fileman="pcmanfm > /dev/null 2>&1 &"
-alias highdpi='xrandr --output eDP1 --dpi 150'
-alias lowdpi='xrandr --output eDP1 --dpi 100'
 alias top='htop'
 alias rm='rm -I --preserve-root'
+alias feh='feh --edit --conversion-timeout 60 --sort filename --cache-size 128 --version-sort -xPp --scale-down'
