@@ -12,7 +12,16 @@ i3lock_options=(
   --lockfailedtext="?!"
   --radius=25
   --ring-width=5
-  -e -f -i /tmp/sc.png
+  --insidevercolor=0000a0bf
+  --insidewrongcolor=ff8000bf
+  --insidecolor=ffffffbf
+  --ringvercolor=0020ffff
+  --ringwrongcolor=4040ffff
+  --ringcolor=404090ff
+  --linecolor=aaaaaaff
+  --keyhlcolor=30ccccff
+  --bshlcolor=ff8000ff
+  -e -m -f -i /tmp/sc.png
 )
 
 # Borrowed from the xss-lock docs
