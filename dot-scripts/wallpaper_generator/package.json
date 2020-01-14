@@ -8,11 +8,8 @@
   "license": "GPL-2.0-or-later",
   "private": false,
   "dependencies": {
-    "async-sema": "^3.1.0",
-    "command-exists": "^1.2.8",
-    "expand-tilde": "^2.0.2",
-    "sharp": "^0.23.0",
-    "trianglify": "^2.0.0"
+    "sharp": "0.23.0",
+    "trianglify": "2.0.0"
   },
   "scripts": {
     "start": "node index.js"

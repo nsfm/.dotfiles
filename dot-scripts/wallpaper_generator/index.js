@@ -2,20 +2,19 @@
 "use strict";
 
 const { promises: fs } = require("fs");
-const { PassThrough } = require("stream");
-const { spawn } = require("child_process");
+const { homedir } = require("os");
+const { spawn, exec } = require("child_process");
 
-const { Sema } = require("async-sema");
 const Trianglify = require("trianglify");
 const sharp = require("sharp");
-const expandTilde = require("expand-tilde");
-const commandExists = require("command-exists");
 
-class WallpaperGenerator {
+class Smear {
   constructor() {
-    this.wallpaperPath = expandTilde("~/.wallpapers/bg.png");
-    this.wallpaperWidth = 2570; // Sized up to account for jank.
-    this.wallpaperHeight = 1460;
+    this.wallpaperPath = "~/.wallpapers/bg.png".replace("~", homedir);
+    this.wallpaperTmpPath = "/tmp/.bg.png".replace("~", homedir);
+
+    this.wallpaperWidth = 2560;
+    this.wallpaperHeight = 1440;
 
     this.triangleSettings = {
       width: this.wallpaperWidth,
@@ -29,111 +28,122 @@ class WallpaperGenerator {
 
     this.blur = 50; // Takes a long time but looks pretty.
     this.transitionSteps = 255; // Frames to render.
-    this.montageConcurrency = 8; // Number of feh processes building frames.
+
+    // Decreasing politness increases maximum frames per second
+    // on wallpaper transitions, in case you want a faster fade.
+    // Decreasing it also increases the chance of an annoying
+    // flickering effect. You win some, you lose some.
+    // 1 - safe and slow
+    // 0 - definitely flickering
+    this.politeness = 0.25;
+
+    this.verbose = false;
+    if (!this.verbose) {
+      for (const key of ["time", "timeEnd", "log"]) {
+        console[key] = () => {};
+      }
+    }
   }
 
   async run() {
-    if (!(await commandExists("feh"))) {
-      console.error("Sorry - you need to install `feh`");
-      process.exit(1);
+    try {
+      await new Promise((resolve, reject) => {
+        exec("which hsetroot", (err, stdout) => {
+          if (err) reject(err);
+          else resolve(stdout);
+        });
+      });
+    } catch (err) {
+      throw new Error("Sorry - you need to install `hsetroot`");
     }
 
     const timestamp = Date.now();
     console.time("generate wallpaper");
-    const wallpaper = await this.generateWallpaper();
+    const newWallpaper = await this.generateWallpaper();
+    const write = fs.writeFile(this.wallpaperTmpPath, newWallpaper);
     console.timeEnd("generate wallpaper");
 
-    const semaphore = new Sema(this.montageConcurrency, {
-      capacity: this.transitionSteps
-    });
+    /**
+     * I think that most of `hsetroot`'s execution time is spent
+     * compositing. Rather than waiting for each job to complete,
+     * we'll track the average time taken and undercut it to
+     * effectively parallelize the compositing operations.
+     *
+     * This is a weird, bad optimization, but it gives a pretty
+     * nice performance boost.
+     */
+    let before = Date.now();
+    await this.hsetWallpaper(this.wallpaperPath);
+    let avgTime = Date.now() - before;
 
-    const frames = [];
-    const montageProcesses = [];
+    // We let the write of the temp file run while we were checking the
+    // wallpaper transition speed - make sure it finished.
+    await write;
+
+    const setters = [];
     for (let frame = 0; frame < this.transitionSteps; frame++) {
-      montageProcesses.push(
-        new Promise(async done => {
-          await semaphore.acquire();
-          let paint;
-          const paintSignal = new Promise(resolve => {
-            paint = resolve;
-          });
+      const percent = `${((frame / this.transitionSteps) * 100).toFixed(1)}%`;
+      console.time(percent);
+      await new Promise(async resolve => {
+        const setter = this.hsetWallpaper(
+          this.wallpaperPath,
+          this.wallpaperTmpPath,
+          frame
+        );
+        setters.push(setter);
 
-          await this.setTransitionFrame({
-            frame,
-            wallpaperPath: this.wallpaperPath,
-            wallpaper,
-            paintSignal
-          });
-          frames[frame] = paint;
-          semaphore.release();
-          done();
-        })
-      );
+        // Start the next job a little early.
+        setTimeout(resolve, avgTime * this.politeness);
+
+        // Wait to update average time.
+        const start = Date.now();
+        await setter;
+        avgTime = Date.now() - start;
+      });
+      console.timeEnd(percent);
     }
 
-    // Wait for all the montages to be generated.
-    await Promise.all(montageProcesses);
+    // Make sure we finished setting all the transitional wallpapers.
+    await Promise.all(setters);
 
-    // Draw each background.
-    for (let frame = 0; frame < this.transitionSteps; frame++) {
-      await new Promise(frames[frame]);
-    }
-
-    await fs.writeFile(this.wallpaperPath, wallpaper);
-    process.exit(0);
+    // Persist the new wallpaper.
+    await fs.writeFile(this.wallpaperPath, newWallpaper);
+    await Promise.all([
+      this.hsetWallpaper(this.wallpaperPath),
+      fs.unlink(this.wallpaperTmpPath)
+    ]);
   }
 
-  async setWallpaper(wallpaper) {
-    const setter = spawn("feh", ["--bg-center", wallpaper]);
+  /**
+   * Set the provided image as the desktop wallpaper using `hsetroot`.
+   *
+   * Optionally accepts a second image to be applied as a translucent
+   * overlay, according to the provided alpha value which must be an
+   * integer from 1 to 255.
+   *
+   * It takes around 100 milliseconds to set the wallpaper.
+   *
+   * @param {string} wallpaper Path to an image.
+   * @param {string} overlay Path to an image.
+   * @param {integer} alpha Alpha value as an integer from 0 to 255.
+   * @returns {Promise} Resolves after the wallpaper has been set.
+   */
+  async hsetWallpaper(wallpaper, overlay, alpha) {
+    const hsetargs = ["-center", wallpaper];
+
+    if (overlay) {
+      hsetargs.push("-alpha", alpha, "-center", overlay);
+    }
+
+    const setter = spawn("hsetroot", hsetargs);
     return new Promise(resolve => setter.on("exit", resolve));
   }
 
-  async setTransitionFrame({
-    frame = 0,
-    wallpaperPath,
-    wallpaper,
-    paintSignal
-  } = {}) {
-    return new Promise(async signalNextFrame => {
-      const alpha = Math.round(255 - frame * (1 / this.transitionSteps) * 255);
-      const tmpPath = `/tmp/.wallpapers/bg_${alpha}.png`;
-      const montageArgs = `
-      -m
-      --ignore-aspect
-      --bg=${wallpaperPath}
-      --thumb-width=${this.wallpaperWidth}
-      --thumb-height=${this.wallpaperHeight - 5}
-      --limit-width=${this.wallpaperWidth}
-      --limit-height=${this.wallpaperHeight}
-      --alpha=${alpha}
-      --output-only=${tmpPath}
-      -
-    `;
-
-      const montage = spawn("feh", montageArgs.split(/(\s+)/));
-      // Pipe the wallpaper buffer into the spawned process.
-      new PassThrough().end(wallpaper).pipe(montage.stdin);
-
-      await new Promise(resolve => montage.on("exit", resolve));
-      console.log(`${(100 - (alpha / 255) * 100).toFixed(2)}%`);
-
-      // Building the montage always takes longer than setting the wallpaper.
-      // Signal the next frame to start building its montage.
-      signalNextFrame();
-      // Wait until all the other montages are done building.
-      const done = await paintSignal;
-
-      await this.setWallpaper(tmpPath);
-      console.log(`${(100 - (alpha / 255) * 100).toFixed(2)}%`);
-
-      // Signal the next frame.
-      done();
-
-      // Clean up.
-      await fs.unlink(tmpPath);
-    });
-  }
-
+  /**
+   * Generate a wallpaper.
+   *
+   * @returns {Promise<Buffer>} A Buffer containig a png image.
+   */
   async generateWallpaper() {
     // Strangely, grabbing the data URI from the SVG was the fastest way to pass
     // the data to sharp on my machine.
@@ -141,7 +151,7 @@ class WallpaperGenerator {
     const buffer = new Buffer.from(triangles.outerHTML);
 
     const wallpaper = sharp(buffer)
-      .removeAlpha()
+      .ensureAlpha()
       .blur(this.blur)
       .png()
       .toBuffer();
@@ -151,7 +161,7 @@ class WallpaperGenerator {
 }
 
 (async () => {
-  const wpg = new WallpaperGenerator();
-  await wpg.run();
+  const smear = new Smear();
+  await smear.run();
   process.exit();
 })();
