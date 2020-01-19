@@ -4,9 +4,6 @@
 
 #include <Imlib2.h>
 
-// I don't think I need this.
-#include <X11/extensions/Xinerama.h>
-
 // Need to clean these up.
 #include <stdbool.h>
 #include <stdio.h>
@@ -99,7 +96,7 @@ setRootAtoms(Pixmap pixmap)
 }
 
 int
-composite_image(Imlib_Image* buffer, int alpha, Imlib_Image rootimg, XineramaScreenInfo *outputs, int noutputs)
+composite_image(Imlib_Image* buffer, int alpha, Imlib_Image rootimg, int width, int height)
 {
   int imgW, imgH, j;
 
@@ -128,11 +125,10 @@ composite_image(Imlib_Image* buffer, int alpha, Imlib_Image rootimg, XineramaScr
 
   imlib_context_set_image(rootimg);
 
-  XineramaScreenInfo o = outputs[0];
-  printf("size(%d, %d) pos(%d, %d)\n", o.width, o.height, o.x_org, o.y_org);
-  int left = (o.width - imgW) / 2;
-  int top = (o.height - imgH) / 2;
-  imlib_blend_image_onto_image(buffer, 0, 0, 0, imgW, imgH, o.x_org + left, o.y_org + top, imgW, imgH);
+  printf("size(%d, %d) size2(%d, %d)\n", width, height, imgW, imgH);
+  int left = (width - imgW) / 2;
+  int top = (height - imgH) / 2;
+  imlib_blend_image_onto_image(buffer, 0, 0, 0, imgW, imgH, left, top, imgW, imgH);
 
   return 1;
 }
@@ -146,7 +142,6 @@ int main(int argc, char **argv) {
   Pixmap pixmap;
   Imlib_Color_Modifier modifier = NULL;
   unsigned long screen_mask = ~0;
-  int opt_root = true;
 
   /* global */ display = XOpenDisplay(NULL);
 
@@ -154,19 +149,6 @@ int main(int argc, char **argv) {
     fprintf(stderr, "Cannot open X display!\n");
     exit(123);
   }
-
-
-  int noutputs = 0;
-  XineramaScreenInfo *outputs = NULL;
-  XineramaScreenInfo fake = {
-    .x_org = 0,
-    .y_org = 0,
-    .width = 0,
-    .height = 0,
-  };
-
-    noutputs = 1;
-    outputs = &fake;
 
   Imlib_Context *context = imlib_context_new();
   imlib_context_push(context);
@@ -178,19 +160,14 @@ int main(int argc, char **argv) {
   height = DisplayHeight(display, screen);
   depth = DefaultDepth(display, screen);
 
-  fprintf(stderr, "a");
   // Fetch current wallpaper.
   Imlib_Image old_wallpaper = loadCurrentWallpaper(display, RootWindow(display, 0), width, height);
 
-  Imlib_Image new_wallpaper = imlib_load_image(argv[1]);
+  Imlib_Image new_wallpaper = imlib_load_image_immediately_without_cache(argv[1]);
 
-  fprintf(stderr, "g");
   for (screen = 0; screen < ScreenCount(display); screen++) {
     if ((screen_mask & (1 << screen)) == 0)
       continue;
-
-    outputs[0].width = width;
-    outputs[0].height = height;
 
     pixmap = XCreatePixmap(display, RootWindow(display, screen), width, height, depth);
 
@@ -217,16 +194,16 @@ int main(int argc, char **argv) {
     modifier = imlib_create_color_modifier();
     imlib_context_set_color_modifier(modifier);
 
-    if (composite_image(old_wallpaper, 255, image, outputs, noutputs) == 0) {
-      fprintf (stderr, "Bad image (%s)\n", "/tmp/test.png");
+    if (composite_image(old_wallpaper, 255, image, width, height) == 0) {
+      fprintf (stderr, "Failed to composite current wallpaper.");
       exit(1);
     }
 
     // No point starting at 0.
-    for (alpha = 1; alpha < 128; alpha++) {
+    for (alpha = 1; alpha < 255; alpha++) {
       alpha++;
       start = clock();
-      if (composite_image(new_wallpaper, alpha, image, outputs, noutputs) == 0) {
+      if (composite_image(new_wallpaper, alpha, image, width, height) == 0) {
         fprintf (stderr, "Bad image (%s)\n", "/tmp/sc.png");
         exit(1);
       }
@@ -243,7 +220,6 @@ int main(int argc, char **argv) {
       }
 
       imlib_render_image_on_drawable(0, 0);
-
 
       if (setRootAtoms(pixmap) == 0)
         fprintf(stderr, "Couldn't create atoms...\n");
@@ -269,15 +245,6 @@ int main(int argc, char **argv) {
     imlib_free_image();
     imlib_context_set_image(new_wallpaper);
     imlib_free_image();
-  }
-
-  if (outputs != NULL) {
-    if (!opt_root) {
-      XFree(outputs);
-    }
-
-    outputs = NULL;
-    noutputs = 0;
   }
 
   return 0;
