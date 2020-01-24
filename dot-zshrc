@@ -5,6 +5,7 @@ export PAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     -c 'map <SPACE> <C-D>' -c 'map b <C-U>' \
     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
 export GPG_TTY=$(tty)
+export BAT_PAGER="less -REF"
 
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"

@@ -21,6 +21,7 @@ autocutsel
 automake
 b43-fwcutter
 bash
+bat
 bdf-unifont
 bind-tools
 binutils
@@ -161,6 +162,7 @@ pulseeffects
 python-pip
 python-pyalsa
 python-pynvim
+recordmydesktop
 reiserfsprogs
 rofi
 rsync
