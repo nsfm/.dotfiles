@@ -9,9 +9,9 @@ i3lock_options=(
   --wrongtext=""
   --noinputtext=""
   --locktext=""
-  --lockfailedtext="?!"
-  --radius=25
-  --ring-width=5
+  --lockfailedtext=""
+  --radius=30
+  --ring-width=3
   --insidevercolor=0000a0bf
   --insidewrongcolor=ff8000bf
   --insidecolor=ffffffbf
@@ -21,7 +21,9 @@ i3lock_options=(
   --linecolor=aaaaaaff
   --keyhlcolor=30ccccff
   --bshlcolor=ff8000ff
-  -e -m -f -i /tmp/sc.png
+  --ignore-empty-password
+  --show-failed-attempts
+  --image=/tmp/sc.png
 )
 
 # Borrowed from the xss-lock docs
@@ -70,6 +72,7 @@ if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
     done
 else
     trap 'kill %%' TERM INT
+    echo "${i3lock_options[@]}"
     i3lock -n ${i3lock_options[@]} &
     wait
 fi

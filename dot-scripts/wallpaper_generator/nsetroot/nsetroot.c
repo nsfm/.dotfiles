@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>    
+#include <argp.h>
 
 /**
  * My deep and sincere gratitude to Erlend Hamberg.
@@ -96,6 +98,22 @@ setRootAtoms(Pixmap pixmap)
 }
 
 int
+delay(unsigned long milliseconds)
+{
+  struct timespec ts;
+  int res;
+
+  ts.tv_sec = milliseconds / 1000;
+  ts.tv_nsec = (milliseconds % 1000) * 1000000;
+
+  do {
+    res = nanosleep(&ts, &ts);
+  } while (res && errno == EINTR);
+
+  return res;
+}
+
+int
 composite_image(Imlib_Image* buffer, int alpha, Imlib_Image rootimg, int width, int height)
 {
   int imgW, imgH, j;
@@ -133,6 +151,8 @@ composite_image(Imlib_Image* buffer, int alpha, Imlib_Image rootimg, int width, 
   return 1;
 }
 
+
+
 int main(int argc, char **argv) {
   clock_t start, stop;
   Visual *vis;
@@ -142,6 +162,8 @@ int main(int argc, char **argv) {
   Pixmap pixmap;
   Imlib_Color_Modifier modifier = NULL;
   unsigned long screen_mask = ~0;
+
+  unsigned long transition_delay
 
   /* global */ display = XOpenDisplay(NULL);
 
@@ -200,7 +222,8 @@ int main(int argc, char **argv) {
     }
 
     // No point starting at 0.
-    for (alpha = 1; alpha < 255; alpha++) {
+    for (alpha = 1; alpha < 100; alpha++) {
+      delay(transitionDelay)
       alpha++;
       start = clock();
       if (composite_image(new_wallpaper, alpha, image, width, height) == 0) {

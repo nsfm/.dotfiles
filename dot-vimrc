@@ -27,24 +27,19 @@ set t_Co=256
 set ttymouse=sgr
 set encoding=utf-8
 set clipboard=unnamedplus
-set background=light
+set background=dark
 set shortmess=I
 set mat=5
 
 " Specify a directory for Plug plugins.
 call plug#begin('~/.vim/plugged')
 
+" Code completion
+Plug 'zxqfl/tabnine-vim'
 " ES6 Javascript syntax support.
 Plug 'othree/yajs.vim'
-" Javascript plugin for Deoplete.
-Plug 'wokalski/autocomplete-flow'
-" For function argument completion.
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
 " For automatic Javascript formatting.
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-" For static analysis of Javascript
-Plug 'ternjs/tern_for_vim', { 'do': 'yarn install' }
 " Airline.
 Plug 'vim-airline/vim-airline'
 " CSV integrations for Airline.
@@ -61,10 +56,10 @@ Plug 'google/vim-searchindex'
 Plug 'w0rp/ale'
 " Git diff integration.
 Plug 'airblade/vim-gitgutter'
-" Eslint formatting.
-Plug 'ruanyl/vim-fixmyjs'
-Plug 'pangloss/vim-javascript'
-Plug 'elzr/vim-json'
+" Generate code screenshots with :Silicon or :SiliconHighlight
+Plug 'segeljakt/vim-silicon'
+" Red theme
+Plug 'fcpg/vim-farout'
 
 " :PlugInstall to reload these plugins.
 " :PlugUpdate to update.
@@ -191,6 +186,8 @@ autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*
 " autocmd BufWritePre, *.js,*.jsx :Fixmyjs
 
 call plug#end()
+
+"colorscheme farout
 
 " Then override parenthesis.
 "au VimEnter * RainbowParenthesesToggle
