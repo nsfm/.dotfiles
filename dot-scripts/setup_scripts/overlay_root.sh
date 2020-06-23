@@ -4,4 +4,4 @@ script=$(readlink -f "$0")
 dir=$(dirname "$script")
 
 echo "Overlaying $dir/root over /"
-cp -rs $dir/root/. /
+cp -rsu $dir/root/. /

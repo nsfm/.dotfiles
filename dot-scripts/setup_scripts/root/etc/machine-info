@@ -1,0 +1,5 @@
+PRETTY_HOSTNAME="Gourd"
+ICON_NAME=laptop
+CHASSIS=laptop
+DEPLOYMENT=production
+LOCATION="Sitting around at home"
