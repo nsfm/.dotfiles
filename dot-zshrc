@@ -18,6 +18,8 @@ setopt appendhistory autocd nomatch
 autoload -U edit-command-line;
 zle -N edit-command-line;
 bindkey '^F' edit-command-line;
+bindkey '^[OA' history-beginning-search-backward
+bindkey '^[OB' history-beginning-search-forward
 zmodload zsh/mathfunc
 autoload bashcompinit
 bashcompinit
