@@ -1,63 +1,34 @@
 #!/usr/bin/sh
 
-# -selective-blur geometry
-# -adaptive-blur
-maim -q -m 5 -u | convert -taint -scale 10% -scale 1000% - png:/tmp/sc.png
-
 i3lock_options=(
-  --veriftext=""
-  --wrongtext=""
-  --noinputtext=""
-  --locktext=""
-  --lockfailedtext=""
-  --radius=30
-  --ring-width=3
-  --insidevercolor=0000a0bf
-  --insidewrongcolor=ff8000bf
-  --insidecolor=ffffffbf
-  --ringvercolor=0020ffff
-  --ringwrongcolor=4040ffff
-  --ringcolor=404090ff
-  --linecolor=aaaaaaff
-  --keyhlcolor=30ccccff
-  --bshlcolor=ff8000ff
+  --verif-text=""
+  --wrong-text="???"
+  --noinput-text="?"
+  --lock-text=""
+  --lockfailed-text="!!!"
+  --radius=40
+  --ring-width=10
+  --insidever-color=0000a0bf
+  --insidewrong-color=ff8000bf
+  --inside-color=ffffffbf
+  --ringver-color=0020ffff
+  --ringwrong-color=4040ffff
+  --ring-color=404090ff
+  --line-color=aaaaaaff
+  --keyhl-color=30ccccff
+  --bshl-color=ff8000ff
   --ignore-empty-password
   --show-failed-attempts
-  --image=/tmp/sc.png
 )
 
-# Borrowed from the xss-lock docs
-get_brightness() {
-    if [[ -z $sysfs_path ]]; then
-        xbacklight -get
-    else
-        cat $sysfs_path
-    fi
-}
+# -selective-blur geometry
+# -adaptive-blur
+timeout 1s maim -q -m 1 -u -f jpg | convert -taint -scale 10% -scale 1000% - jpg:/tmp/sc.jpg
+if [ $? -eq 0 ]; then
+  i3lock_options+=(--image=/tmp/sc.jpg)
+fi
 
-set_brightness() {
-    if [[ -z $sysfs_path ]]; then
-        xbacklight -steps 1 -set $1
-    else
-        echo $1 > $sysfs_path
-    fi
-}
-
-fade_brightness() {
-    if [[ -z $sysfs_path ]]; then
-        xbacklight -time $fade_time -steps $fade_steps -set $1
-    elif [[ -z $fade_step_time ]]; then
-        set_brightness $1
-    else
-        local level
-        for level in $(eval echo {$(get_brightness)..$1}); do
-            set_brightness $level
-            sleep $fade_step_time
-        done
-    fi
-}
-
-# Also borrowed from the xss-lock docs
+# From the xss-lock docs
 if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
     kill_i3lock() {
         pkill -xu $EUID "$@" i3lock

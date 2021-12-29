@@ -4,4 +4,8 @@ gpgsign = true
 [user]
 email = nate@ndube.com
 name = Nate Dube
-signingkey = 39B10279260165D1
+signingkey = F39DC82D12D3EFC7 
+[init]
+defaultBranch = main
+[pull]
+rebase = true

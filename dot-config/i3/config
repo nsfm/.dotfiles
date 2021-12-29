@@ -11,37 +11,35 @@ font pango: Operator Mono Light 8
 # Mod + drag to float windows
 floating_modifier $super
 
-# Set the wallpaper to last boot's, then start generating a new one.
-exec --no-startup-id feh --bg-center ~/.wallpapers/bg.png
-exec --no-startup-id yarn --cwd ~/.scripts/wallpaper_generator start
-
-# Use webcam to keep backlight reasonable.
-# exec --no-startup-id clight --device=video2 &
-
-# Synchronize clipboards.
+# Need to set xrandr settings before i3 starts to support rotated displays
+exec --no-startup-id autorandr -c
+# Wallpaper
+exec --no-startup-id feh --bg-fill ~/.wallpapers/bg.png
+#exec --no-startup-id yarn --cwd ~/.scripts/wallpaper_generator start
+# Synchronize clipboards
 exec --no-startup-id autocutsel -fork &
 exec --no-startup-id autocutsel -selection PRIMARY -fork &
-
-# Something to do with providing xresources to lazy org services.
+# Something to do with providing xresources to lazy org services
 exec --no-startup-id xsettingsd &
-
-# Compositor.
+# Compositor
 exec --no-startup-id compton -b
-
-# Notification Server.
+# Notification Server
 exec --no-startup-id dunst
-
-# Applets.
+# Volume applet
 exec --no-startup-id volnoti &
+# Bluetooth applet
+exec --no-startup-id blueman-applet &
+# Wifit applet
 exec --no-startup-id nm-applet &
-
-# Power saving.
-exec --no-startup-id rfkill block bluetooth
-exec --no-startup-id ~/.scripts/disable_audio_pin.sh
-exec --no-startup-id ~/.scripts/disable_memory_card_reader.sh
-
-# Lock on screensaver, suspend.
+# USB auto mount
+exec --no-startup-id udiskie &
+# Lock on screensaver, suspend
 exec --no-startup-id xss-lock -n ~/.scripts/lock.sh -l ~/.scripts/lock.sh &
+# Power saving
+#exec --no-startup-id rfkill block bluetooth
+#exec --no-startup-id ~/.scripts/disable_audio_pin.sh
+#exec --no-startup-id ~/.scripts/disable_memory_card_reader.sh
+
 
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
@@ -59,8 +57,8 @@ bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- && \
 bindsym XF86AudioMute exec --no-startup-id "amixer set Master toggle && if amixer get Master | grep -Fq '[off]'; then volnoti-show -m $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); else volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); fi"
 
 # Adjust brightness from hotkeys.
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym XF86MonBrightnessUp exec oled-backlight + 5%
+bindsym XF86MonBrightnessDown exec oled-backlight - 5%
 
 # kill focused window
 bindsym $super+x kill
@@ -170,7 +168,7 @@ client.placeholder		#2f343f #2f343f #d8dee8 #2f343f #2f343f
 client.background		#2f343f
 
 # Fibonacci style windows thanks to /u/zenoblade
-default_orientation vertical #start in opposite orientation from your monitor
-for_window [class=".*"] split toggle #toggles split at each new window
-bindsym $mod+shift+q split toggle kill #kill command resets the split
-bindsym $mod+e layout toggle split # should already exist but use if split orientation  messes up
+# default_orientation vertical #start in opposite orientation from your monitor
+# for_window [class=".*"] split toggle #toggles split at each new window
+# bindsym $mod+shift+q split toggle kill #kill command resets the split
+# bindsym $mod+e layout toggle split # should already exist but use if split orientation  messes up

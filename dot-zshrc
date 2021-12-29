@@ -1,4 +1,4 @@
-export PATH=$PATH:~/.config/yarn/global
+export PATH=$PATH:~/.config/yarn/global:~/.yarn/bin:~/.local/bin
 export EDITOR=vim
 export PAGER="/bin/sh -c \"unset PAGER;col -b -x | \
     vim -R -c 'set ft=man nomod nolist' -c 'map q :q<CR>' \
@@ -24,13 +24,9 @@ zmodload zsh/mathfunc
 autoload bashcompinit
 bashcompinit
 
-# pacman -S zsh-syntax-highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# pacman -S zsh-autosuggestions
-# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Disable godforsaken PC beeping.
 xset -b
 unsetopt beep
 

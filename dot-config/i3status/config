@@ -11,7 +11,6 @@ general {
 order += "load"
 order += "cpu_temperature 0"
 order += "disk /"
-order += "wireless wlp2s0"
 order += "volume master"
 order += "battery 1"
 order += "tztime local"
@@ -27,11 +26,6 @@ cpu_temperature 0 {
 
 disk "/" {
         format = "<span background='#fec7cd'> %free </span>"
-}
-
-wireless wlp2s0 {
-        format_up = "<span background='#b48ead'> %essid </span>"
-        format_down = "<span background='#b48ead'> Disconnected </span>"
 }
 
 volume master {
@@ -56,7 +50,5 @@ battery 1 {
 }
 
 tztime local {
-		format = "<span background='#81a1c1'> %time </span>"
-		format_time = "%-d %b %H:%M"
+	format = "<span background='#81a1c1'> Day %d, %H:%M </span>"
 }
-
