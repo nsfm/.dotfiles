@@ -60,6 +60,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'segeljakt/vim-silicon'
 " Red theme
 Plug 'fcpg/vim-farout'
+" PlantUML syntax
+Plug 'aklt/plantuml-syntax'
 
 " :PlugInstall to reload these plugins.
 " :PlugUpdate to update.
@@ -181,6 +183,9 @@ autocmd BufWritePre *.py execute ':Black'
 " Run Prettier before every save in the following file types.
 let g:prettier#autoformat = 1
 autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
+
+" Automatically render puml diagrams
+autocmd BufWritePost *.puml !plantuml -checkonly %:p && plantuml %:p && kitty +kitten icat "%:p:r.png"
 
 " Run Fixmyjs before every save in the following file types.
 " autocmd BufWritePre, *.js,*.jsx :Fixmyjs
