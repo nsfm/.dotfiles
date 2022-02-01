@@ -12,8 +12,6 @@ set hlsearch
 set ignorecase
 set smartcase
 set confirm
-set cmdheight=2
-set hidden
 set showcmd
 set nostartofline
 set ruler
@@ -25,57 +23,70 @@ set conceallevel=0
 set directory=~/.vim/tmp
 set t_Co=256
 set ttymouse=sgr
-set encoding=utf-8
 set clipboard=unnamedplus
 set background=dark
 set shortmess=I
 set mat=5
 
-" Specify a directory for Plug plugins.
 call plug#begin('~/.vim/plugged')
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+" coc-tsserver coc-json coc-html coc-css coc-pyright
+" coc-git coc-cmake coc-highlight coc-tabnine
+" coc-emoji coc-prettier coc-word coc-explorer coc-eslint
 
-" Code completion
-Plug 'zxqfl/tabnine-vim'
-" ES6 Javascript syntax support.
-Plug 'othree/yajs.vim'
-" For automatic Javascript formatting.
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-" Airline.
 Plug 'vim-airline/vim-airline'
-" CSV integrations for Airline.
 Plug 'chrisbra/csv.vim'
-" Themes for Airline.
-Plug 'vim-airline/vim-airline-themes'
-" Python formatting and autocompletion.
-Plug 'zchee/deoplete-jedi'
-" JSDoc formatting and helpers.
-Plug 'heavenshell/vim-jsdoc'
-" Why isn't this feature built in? Shows the index of the highlighted search result.
 Plug 'google/vim-searchindex'
-" Linting.
-Plug 'w0rp/ale'
-" Git diff integration.
 Plug 'airblade/vim-gitgutter'
 " Generate code screenshots with :Silicon or :SiliconHighlight
 Plug 'segeljakt/vim-silicon'
-" Red theme
 Plug 'fcpg/vim-farout'
-" PlantUML syntax
 Plug 'aklt/plantuml-syntax'
+call plug#end()
 
-" :PlugInstall to reload these plugins.
-" :PlugUpdate to update.
+" CoC recommendations
+set hidden
+set cmdheight=2
+set nobackup
+set nowritebackup
+set encoding=utf-8
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
 
-" Load native Vim plugins.
-packloadall
+" :PlugInstall
+" :PlugUpdate
+" :PlugClean
+" :PlugSnapshot
 
-" Map ctrl-a to select all.
-map <C-a> <esc>ggVG<CR>
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
+:nmap <space>e <Cmd>CocCommand explorer<CR>
+:nmap <space>p <Cmd>CocCommand prettier.formatFile<CR>
+:nmap <space>h <Cmd>call CocActionAsync('doHover')<CR>
+:nmap <space>, <Plug>(coc-diagnostic-prev)
+:nmap <space>. <Plug>(coc-diagnostic-next)
+:nmap <space>d <Plug>(coc-definition)
+:nmap <space>t <Plug>(coc-type-definition)
+:nmap <space>i <Plug>(coc-implementation)
+:nmap <space>r <Plug>(coc-references)
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+inoremap <silent><expr> <NUL> coc#refresh()
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue Prettier
+
+let g:vim_json_syntax_conceal = 0
 let g:airline_powerline_fonts = 1
 
-filetype off
-" Parameters for special kinds of files
+syntax enable
+filetype on
+filetype plugin on
+filetype indent on
+filetype plugin indent on
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 autocmd Filetype c set ts=2 sw=2 expandtab
 autocmd Filetype cpp set ts=2 sw=2 expandtab
@@ -85,32 +96,6 @@ autocmd Filetype python set ts=4 sw=4 expandtab textWidth=79
 autocmd BufNewFile,BufRead *.hbs set syntax=html
 autocmd BufNewFile,BufRead *.scss set syntax=css
 
-" Syntax highlighting on
-syntax enable
-
-" ALE Configuration
-let g:ale_linters = {'javascript': ['eslint']}
-let g:ale_enabled = 1
-let g:ale_lint_on_insert_leave = 1
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '--'
-let g:ale_completion_enabled = 1
-let g:airline#extensions#ale#enabled = 1
-let g:ale_linters_explicit = 1
-
-" Stop formatting JSON in an obnoxious way.
-let g:vim_json_syntax_conceal = 0
-
-" Filetype detection on
-filetype on
-filetype plugin on
-filetype indent on
-filetype plugin indent on
-
-let g:cpp_class_scope_highlight = 1
-let g:cpp_experimental_template_highlight = 1
-
 " Highlight lines that exceed 120 characters in length
 " execute "set cc=".join(range(81,300), ',')
 hi ColorColumn cterm=bold ctermbg=233
@@ -118,90 +103,15 @@ hi SpellBad ctermbg=052
 hi SpellCap ctermbg=052
 hi SignColumn ctermbg=232
 
-" Rainbow parenthesis configuration.
-let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3']
-    \ ]
-
-let g:rbpt_max = 16
-let g:rbpt_loadcmd_toggle = 0
-
-" Disable the godforsaken beeping.
 set noerrorbells visualbell t_vb=
 if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
 endif
 
-" Enable Deoplete.
-let g:deoplete#enable_at_startup = 1
-" Close the scratch window after fixing the issue.
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-" Deoplete tab-complete.
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-" Enable Neosnippet.
-let g:neosnippet#enable_completed_snippet = 1
-" Insert parenthesis when completing a function name.
-let g:autocomplete_flow#insert_paren_after_function = 1
-
-let g:deoplete#enable_yarp = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#max_processes = 2
-
-" Prettier configuration.
-"let g:prettier#config#print_width = 120
-"let g:prettier#config#tab_width = 2
-"let g:prettier#config#use_tabs = 'false'
-"let g:prettier#config#semi = 'false'
-let g:prettier#config#single_quote = 'false'
-let g:prettier#config#bracket_spacing = 'true'
-let g:prettier#config#jsx_bracket_same_line = 'false'
-let g:prettier#config#arrow_parens = 'avoid'
-let g:prettier#config#trailing_comma = 'none'
-let g:prettier#config#parser = 'flow'
-let g:prettier#config#config_precedence = 'prefer-file'
-let g:prettier#config#prose_wrap = 'preserve'
-let g:jsdoc_allow_input_prompt = 1
-let g:jsdoc_enable_es6 = 1
-let g:jsdoc_input_description = 1
-
-autocmd BufWritePre *.py execute ':Black'
-
-" Run Prettier before every save in the following file types.
-let g:prettier#autoformat = 1
-autocmd BufWritePre, *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.graphql,*.md,*.vue PrettierAsync
-
 " Automatically render puml diagrams
 autocmd BufWritePost *.puml !plantuml -checkonly %:p && plantuml %:p && kitty +kitten icat "%:p:r.png"
 
-" Run Fixmyjs before every save in the following file types.
-" autocmd BufWritePre, *.js,*.jsx :Fixmyjs
-
-call plug#end()
-
-"colorscheme farout
-
-" Then override parenthesis.
-"au VimEnter * RainbowParenthesesToggle
-"au Syntax * RainbowParenthesesLoadRound
-"au Syntax * RainbowParenthesesLoadSquare
-"au Syntax * RainbowParenthesesLoadBraces
-
-" Italic comments.
+" Italic comments
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 highlight Comment cterm=italic
-
