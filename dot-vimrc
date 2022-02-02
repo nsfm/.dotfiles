@@ -45,6 +45,8 @@ Plug 'fcpg/vim-farout'
 Plug 'aklt/plantuml-syntax'
 call plug#end()
 
+colorscheme farout
+
 " CoC recommendations
 set hidden
 set cmdheight=2
