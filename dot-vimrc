@@ -21,10 +21,8 @@ set noshowmode
 set statusline+=%F
 set conceallevel=0
 set directory=~/.vim/tmp
-set t_Co=256
 set ttymouse=sgr
 set clipboard=unnamedplus
-set background=dark
 set shortmess=I
 set mat=5
 
@@ -45,6 +43,9 @@ Plug 'fcpg/vim-farout'
 Plug 'aklt/plantuml-syntax'
 call plug#end()
 
+set t_Co=256
+set background=dark
+set t_ut=
 colorscheme farout
 
 " CoC recommendations
@@ -105,6 +106,7 @@ hi SpellBad ctermbg=052
 hi SpellCap ctermbg=052
 hi SignColumn ctermbg=232
 
+" No beeping
 set noerrorbells visualbell t_vb=
 if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=

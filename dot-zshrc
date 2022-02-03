@@ -85,6 +85,8 @@ zle -N down-line-or-beginning-search
 autoload -Uz promptinit
 promptinit
 
+setopt inc_append_history
+
 # Unsure
 setopt appendhistory autocd nomatch
 zmodload zsh/mathfunc
