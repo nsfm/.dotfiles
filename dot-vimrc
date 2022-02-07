@@ -41,6 +41,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'segeljakt/vim-silicon'
 Plug 'fcpg/vim-farout'
 Plug 'aklt/plantuml-syntax'
+
+if has('nvim')
+    " Neovim specific commands
+else
+    " Standard vim specific commands
+endif
+
 call plug#end()
 
 set t_Co=256

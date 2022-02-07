@@ -1,9 +1,11 @@
+exec_always --no-startup-id autotiling
+
 # set modifier
 set $super Mod4
 set $alt Mod1
 
 floating_minimum_size 50x50
-floating_maximum_size 10000x10000
+floating_maximum_size 1000x1000
 
 # set font
 font pango: Operator Mono Light 8

@@ -113,6 +113,7 @@ motion
 mplayer
 nano
 neofetch
+neovim
 network-manager-applet
 networkmanager
 networkmanager-openvpn
@@ -150,6 +151,7 @@ pulseaudio-bluetooth
 pulseaudio-equalizer
 python-pip
 python-pipx
+python-pynvim
 python-pysmbc
 qmk
 qt5-serialport
@@ -194,6 +196,7 @@ wine
 wireless_tools
 xarchiver
 xawtv
+xclip
 xcompmgr
 xdg-utils
 xf86-video-intel
@@ -246,6 +249,7 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+xsel
 xss-lock
 xterm
 yarn
