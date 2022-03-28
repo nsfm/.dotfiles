@@ -12,7 +12,6 @@ font pango: Operator Mono Light 8
 
 # Mod + drag to float windows
 floating_modifier $super
-
 # Need to set xrandr settings before i3 starts to support rotated displays
 exec --no-startup-id autorandr -c
 # Wallpaper
@@ -21,7 +20,7 @@ exec --no-startup-id feh --bg-fill ~/.wallpapers/bg.png
 # Synchronize clipboards
 exec --no-startup-id autocutsel -fork &
 exec --no-startup-id autocutsel -selection PRIMARY -fork &
-# Something to do with providing xresources to lazy org services
+# Something to do with xresources
 exec --no-startup-id xsettingsd &
 # Compositor
 exec --no-startup-id compton -b
@@ -35,8 +34,10 @@ exec --no-startup-id blueman-applet &
 exec --no-startup-id nm-applet &
 # USB auto mount
 exec --no-startup-id udiskie &
+# File manager in background for quick launch / automount
+exec --no-startup-id pcmanfm -d &
 # Lock on screensaver, suspend
-exec --no-startup-id xss-lock -n ~/.scripts/lock.sh -l ~/.scripts/lock.sh &
+exec --no-startup-id xss-lock -n /usr/local/bin/slock -l /usr/local/bin/slock &
 # Power saving
 #exec --no-startup-id rfkill block bluetooth
 #exec --no-startup-id ~/.scripts/disable_audio_pin.sh
