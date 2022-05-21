@@ -12,7 +12,6 @@ autorandr
 awesome-terminal-fonts
 base
 bash
-bdf-unifont
 binutils
 bison
 blueman
@@ -20,12 +19,14 @@ bluez-utils
 boost
 cbatticon
 cheese
+clang
 cmake
 cpio
 cups
 cups-pdf
 cups-pk-helper
 cura
+devil
 dhcp
 dialog
 discord
@@ -37,6 +38,7 @@ docker-compose
 dosbox
 dunst
 efibootmgr
+elementary-icon-theme
 emacs
 evince
 fakeroot
@@ -49,6 +51,7 @@ foomatic-db-gutenprint-ppds
 foomatic-db-nonfree-ppds
 foomatic-db-ppds
 fprintd
+freeglut
 fwupd
 gawk
 gcc
@@ -74,6 +77,7 @@ inetutils
 inkscape
 intel-ucode
 ipvsadm
+joyutils
 jre-openjdk
 kitty
 kube-proxy
@@ -96,6 +100,7 @@ lib32-openal
 lib32-opencl-nvidia
 lib32-v4l-utils
 lib32-vkd3d
+libc++
 libgphoto2
 libgsf
 libreoffice-fresh
@@ -104,6 +109,7 @@ linux
 linux-firmware
 lrzip
 lutris
+lxappearance
 lzip
 lzop
 m4
@@ -137,7 +143,7 @@ pacman-contrib
 papirus-icon-theme
 patch
 pavucontrol
-pcmanfm
+pcmanfm-gtk3
 picocom
 picom
 pkgconf
@@ -149,6 +155,7 @@ pulseaudio
 pulseaudio-alsa
 pulseaudio-bluetooth
 pulseaudio-equalizer
+pv
 python-pip
 python-pipx
 python-pynvim
@@ -156,7 +163,6 @@ python-pysmbc
 qmk
 qt5-serialport
 qt5-webengine
-raw-thumbnailer
 rofi
 rsync
 ruby
@@ -176,6 +182,7 @@ texinfo
 texlive-fontsextra
 totem
 tree
+ts-node
 ttf-arphic-uming
 ttf-font-awesome
 ttf-indic-otf
@@ -195,7 +202,7 @@ wimlib
 wine
 wireless_tools
 xarchiver
-xawtv
+xautolock
 xclip
 xcompmgr
 xdg-utils
@@ -250,6 +257,7 @@ xorg-xwd
 xorg-xwininfo
 xorg-xwud
 xsel
+xsettingsd
 xss-lock
 xterm
 yarn
