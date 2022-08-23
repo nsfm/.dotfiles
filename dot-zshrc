@@ -1,13 +1,18 @@
 # Farout theme
 source ~/.scripts/farout.sh
 
-# Powerlevel10k prompt 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ "$(uname)" = "Darwin" ]; then
+  # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+  source ~/powerlevel10k/powerlevel10k.zsh-theme
+else
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
+  source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi 
 
 export PATH=$PATH:~/.config/yarn/global:~/.yarn/bin:~/.local/bin:~/.cargo/bin
 export EDITOR=vim
@@ -95,7 +100,9 @@ setopt appendhistory autocd nomatch
 zmodload zsh/mathfunc
 
 # Disable beeps
-xset -b
+if [ "$(uname)" != "Darwin" ]; then
+  xset -b
+fi
 unsetopt beep
 
 # Stolen
@@ -120,9 +127,17 @@ extract () {
   fi
 }
 
-alias ls="ls -Fhv --color=auto --group-directories-first"
-alias diff="colordiff"
-alias rm='rm -I --preserve-root'
+if [ "$(uname)" = "Darwin" ]; then
+  alias ls="ls -Fhv"
+else
+  alias ls="ls -Fhv --color=auto --group-directories-first"
+  alias rm='rm -I --preserve-root'
+fi 
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+alias diff="colordiff"
+
+source ~/.auth
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

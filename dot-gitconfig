@@ -1,5 +1,5 @@
 [commit]
-gpgsign = true
+	gpgsign = true
 
 [user]
 email = nate@ndube.com
@@ -9,3 +9,5 @@ signingkey = F39DC82D12D3EFC7
 defaultBranch = main
 [pull]
 rebase = true
+[gpg]
+	program = gpg
