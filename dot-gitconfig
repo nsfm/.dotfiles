@@ -1,5 +1,5 @@
 [commit]
-gpgsign = true
+	gpgsign = true
 
 [user]
 email = nate@ndube.com
@@ -11,3 +11,5 @@ defaultBranch = main
 rebase = true
 [push]
 autoSetupRemote = true
+[gpg]
+program = gpg
