@@ -9,3 +9,5 @@ signingkey = F39DC82D12D3EFC7
 defaultBranch = main
 [pull]
 rebase = true
+[push]
+autoSetupRemote = true

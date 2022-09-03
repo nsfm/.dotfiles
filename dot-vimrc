@@ -72,15 +72,15 @@ set signcolumn=yes
 
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-:nmap <space>e <Cmd>CocCommand explorer<CR>
-:nmap <space>p <Cmd>CocCommand prettier.formatFile<CR>
-:nmap <space>h <Cmd>call CocActionAsync('doHover')<CR>
-:nmap <space>, <Plug>(coc-diagnostic-prev)
-:nmap <space>. <Plug>(coc-diagnostic-next)
-:nmap <space>d <Plug>(coc-definition)
-:nmap <space>t <Plug>(coc-type-definition)
-:nmap <space>i <Plug>(coc-implementation)
-:nmap <space>r <Plug>(coc-references)
+":nmap <space>e <Cmd>CocCommand explorer<CR>
+":nmap <space>p <Cmd>CocCommand prettier.formatFile<CR>
+":nmap <space>h <Cmd>call CocActionAsync('doHover')<CR>
+":nmap <space>, <Plug>(coc-diagnostic-prev)
+":nmap <space>. <Plug>(coc-diagnostic-next)
+":nmap <space>d <Plug>(coc-definition)
+":nmap <space>t <Plug>(coc-type-definition)
+":nmap <space>i <Plug>(coc-implementation)
+":nmap <space>r <Plug>(coc-references)
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <NUL> coc#refresh()
@@ -120,7 +120,7 @@ if has('autocmd')
 endif
 
 " Automatically render puml diagrams
-autocmd BufWritePost *.puml !plantuml -checkonly %:p && plantuml %:p && kitty +kitten icat "%:p:r.png"
+" autocmd BufWritePost *.puml !plantuml -checkonly %:p && plantuml %:p && kitty +kitten icat "%:p:r.png"
 
 " Italic comments
 let &t_ZH="\e[3m"
