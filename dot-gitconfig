@@ -13,3 +13,7 @@ rebase = true
 autoSetupRemote = true
 [gpg]
 program = gpg
+[color]
+ui = true
+[core]
+editor = vim
