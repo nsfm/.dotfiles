@@ -1,10 +1,9 @@
 [commit]
-	gpgsign = true
+	gpgsign = false
 
 [user]
 email = nate@ndube.com
 name = Nate Dube
-signingkey = F39DC82D12D3EFC7 
 [init]
 defaultBranch = main
 [pull]
