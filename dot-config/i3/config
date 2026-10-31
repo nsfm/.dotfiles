@@ -42,8 +42,6 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -n ~/.scripts/dim-screen.sh 
 exec --no-startup-id xset s 540 60 dpms 0 0 660
 # Power saving
 #exec --no-startup-id rfkill block bluetooth
-#exec --no-startup-id ~/.scripts/disable_audio_pin.sh
-#exec --no-startup-id ~/.scripts/disable_memory_card_reader.sh
 
 
 bindsym $super+Shift+Return exec kitty --hold -1

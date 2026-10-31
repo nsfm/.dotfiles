@@ -1,19 +1,17 @@
-if [ ! -f "~/.config" ]; then
-  ln -s ~/.dotfiles/dot-config ~/.config
-fi
-
-if [ ! -f "~/.zshrc" ]; then
-  ln -s ~/.dotfiles/dot-zshrc ~/.zshrc
-fi
-
-if [ ! -f "~/.vimrc" ]; then
-  ln -s ~/.dotfiles/dot-vimrc ~/.vimrc
-fi 
-
-if [ ! -f "~/.gitconfig" ]; then
-  ln -s ~/.dotfiles/dot-gitconfig ~/.gitconfig
-fi 
-
-if [ ! -f "~/.scripts" ]; then 
-  ln -s ~/.dotfiles/dot-scripts ~/.scripts
-fi
+#!/bin/sh
+# macos.sh - link ~/.dotfiles/dot-* into ~ as .* (what `stow --dotfiles` does on linux; homebrew's
+# stow mishandles --dotfiles). sourceable: no `exit`, no `set -e`. skips anything that already exists.
+dotfiles="${DOTFILES:-$HOME/.dotfiles}"
+link_dotfiles() {
+  for src in "$dotfiles"/dot-*; do
+    [ -e "$src" ] || continue
+    name=$(basename "$src")
+    dst="$HOME/.${name#dot-}"
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+      printf 'skip  %s (exists)\n' "$dst"
+    else
+      ln -s "$src" "$dst" && printf 'link  %s -> %s\n' "$dst" "$src"
+    fi
+  done
+}
+link_dotfiles
