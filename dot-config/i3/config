@@ -23,11 +23,11 @@ exec --no-startup-id autocutsel -selection PRIMARY -fork &
 # Something to do with xresources
 exec --no-startup-id xsettingsd &
 # Compositor
-exec --no-startup-id compton -b
+# exec --no-startup-id xcompmgr &   (retired 2026-10-30; picom below)
+exec --no-startup-id picom -b
 # Notification Server
 exec --no-startup-id dunst
 # Volume applet
-exec --no-startup-id volnoti &
 # Bluetooth applet
 exec --no-startup-id blueman-applet &
 # Wifit applet
@@ -37,7 +37,9 @@ exec --no-startup-id udiskie &
 # File manager in background for quick launch / automount
 exec --no-startup-id pcmanfm -d &
 # Lock on screensaver, suspend
-exec --no-startup-id xss-lock -n /usr/local/bin/slock -l /usr/local/bin/slock &
+exec --no-startup-id xss-lock --transfer-sleep-lock -n ~/.scripts/dim-screen.sh -- ~/.scripts/lock.sh &
+# dim at 9:00 idle, lock at 10:00, panel off at 11:00
+exec --no-startup-id xset s 540 60 dpms 0 0 660
 # Power saving
 #exec --no-startup-id rfkill block bluetooth
 #exec --no-startup-id ~/.scripts/disable_audio_pin.sh
@@ -47,21 +49,25 @@ exec --no-startup-id xss-lock -n /usr/local/bin/slock -l /usr/local/bin/slock &
 bindsym $super+Shift+Return exec kitty --hold -1
 bindsym $super+Shift+v exec pavucontrol
 bindsym $super+p exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Operator Mono Bold:size=8'"
-bindsym $super+Shift+p exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Operator Mono Bold 12'
+bindsym $super+Shift+p exec --no-startup-id rofi -show drun
 bindsym Print exec scrot 'screenshot_%a-%d%b%y_%H.%M.png' -e 'viewnior $f'
 bindsym $super+l exec ~/.scripts/lock.sh
 
-# Adjust volume with hotkeys and show a volume indicator.
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ && \
-  volnoti-show $(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
-bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- && \
-  volnoti-show $(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
+# Volume / mic hotkeys: pipewire via wpctl, dunst osd (~/.scripts/volume.sh)
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.scripts/volume.sh up
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.scripts/volume.sh down
+bindsym XF86AudioMute exec --no-startup-id ~/.scripts/volume.sh mute
+bindsym XF86AudioMicMute exec --no-startup-id ~/.scripts/volume.sh micmute
 
-bindsym XF86AudioMute exec --no-startup-id "amixer set Master toggle && if amixer get Master | grep -Fq '[off]'; then volnoti-show -m $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); else volnoti-show $(amixer get Master | grep -Po '[0-9]+(?=%)' | head -1); fi"
+# dunst keys (the old [shortcuts] section in dunstrc stopped working in dunst 1.10)
+bindsym $super+Escape exec --no-startup-id dunstctl close
+bindsym $super+Shift+Escape exec --no-startup-id dunstctl close-all
+bindsym $super+grave exec --no-startup-id dunstctl history-pop
+bindsym $super+Shift+grave exec --no-startup-id dunstctl context
 
 # Adjust brightness from hotkeys.
-bindsym XF86MonBrightnessUp exec oled-backlight + 5%
-bindsym XF86MonBrightnessDown exec oled-backlight - 5%
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.scripts/brightness.sh up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.scripts/brightness.sh down
 
 # kill focused window
 bindsym $super+x kill
@@ -138,16 +144,18 @@ bindsym $super+r mode "resize"
 
 # panel
 bar {
+	i3bar_command i3bar --transparency
+	font pango:Operator Mono Light 9
 	colors {
-        background #2f343f
-        statusline #2f343f
-        separator #4b5262
+        background #1b1f2766
+        statusline #ffe4ec
+        separator  #ffb3c680
 
 		# colour of border, background, and text
-        focused_workspace	#2f343f	#bf616a	#d8dee8
-        active_workspace	#2f343f	#2f343f	#d8dee8
-        inactive_workspace	#2f343f	#2f343f	#d8dee8
-        urgent_workspace	#2f343f	#ebcb8b	#2f343f
+        focused_workspace	#ff8fab	#ff8fab	#4a1a2c
+        active_workspace	#ffb3c6	#ffb3c640	#ffe4ec
+        inactive_workspace	#00000000	#00000000	#d9a7b6
+        urgent_workspace	#e0457b	#e0457b	#fff0f5
     }
         status_command i3status
         mode hide

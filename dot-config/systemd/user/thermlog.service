@@ -1,0 +1,10 @@
+[Unit]
+Description=thermal logger to the journal every 5s (post-mortem for thermal shutdowns)
+
+[Service]
+ExecStart=%h/.local/bin/thermlog
+Restart=always
+Nice=10
+
+[Install]
+WantedBy=default.target

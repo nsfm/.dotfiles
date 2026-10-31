@@ -1,0 +1,6 @@
+[Unit]
+Description=battery level watcher (notify at 20/10, suspend at 5)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/battery-watch

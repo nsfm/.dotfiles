@@ -77,10 +77,10 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 ":nmap <space>h <Cmd>call CocActionAsync('doHover')<CR>
 ":nmap <space>, <Plug>(coc-diagnostic-prev)
 ":nmap <space>. <Plug>(coc-diagnostic-next)
-":nmap <space>d <Plug>(coc-definition)
-":nmap <space>t <Plug>(coc-type-definition)
-":nmap <space>i <Plug>(coc-implementation)
-":nmap <space>r <Plug>(coc-references)
+:nmap <space>d <Plug>(coc-definition)
+:nmap <space>t <Plug>(coc-type-definition)
+:nmap <space>i <Plug>(coc-implementation)
+:nmap <space>r <Plug>(coc-references)
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 inoremap <silent><expr> <NUL> coc#refresh()

@@ -1,9 +1,10 @@
 [commit]
-	gpgsign = false
+	gpgsign = true
 
 [user]
 email = nate@ndube.com
 name = Nate Dube
+signingkey = F39DC82D12D3EFC7
 [init]
 defaultBranch = main
 [pull]
@@ -16,3 +17,7 @@ program = gpg
 ui = true
 [core]
 editor = vim
+	hooksPath = /home/nate/.config/git/hooks
+
+[includeIf "gitdir:~/.nyx/"]
+	path = ~/.nyx/.gitconfig
