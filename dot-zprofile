@@ -1,3 +1,17 @@
-if [ -z "$DISPLAY" ] && [ -n "%XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
-  exec startx
+# tty1 -> sway. any other tty -> plain shell. (x11/i3 retired 2026-10-31.)
+if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+  export XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland XDG_SESSION_DESKTOP=sway
+  # run the compositor on the intel gpu only; nvidia stays asleep until prime-run asks for it.
+  # WLR_DRM_DEVICES is a colon-separated list, so the by-path name has to be resolved first.
+  export WLR_DRM_DEVICES="$(readlink -f /dev/dri/by-path/pci-0000:00:02.0-card)"
+  # native wayland where the toolkit can, xwayland otherwise
+  export MOZ_ENABLE_WAYLAND=1 QT_QPA_PLATFORM="wayland;xcb" GDK_BACKEND="wayland,x11" ELECTRON_OZONE_PLATFORM_HINT=auto
+  export _JAVA_AWT_WM_NONREPARENTING=1   # java (zomboid) under xwayland draws a grey window without this
+  export XCURSOR_THEME=elementary XCURSOR_SIZE=24
+  # bemenu (the mod+p launcher): dmenu-shaped, blush colors
+  export BEMENU_OPTS="-H 24 --hp 8 \
+    --tb #ff8fab --tf #4a1a2c --fb #191015 --ff #fff0f5 --cb #191015 --cf #ff8fab \
+    --nb #191015 --nf #f2dce5 --ab #191015 --af #f2dce5 \
+    --hb #ff8fab --hf #4a1a2c --sb #ffb3c6 --sf #4a1a2c --scb #191015 --scf #ff8fab"
+  exec sway > "${XDG_RUNTIME_DIR:-/tmp}/sway.log" 2>&1
 fi

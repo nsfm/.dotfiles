@@ -1,6 +1,3 @@
-# Farout theme
-source ~/.scripts/farout.sh
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -18,10 +15,12 @@ fi
 
 export PATH=$PATH:~/.config/yarn/global:~/.yarn/bin:~/.local/bin:~/.cargo/bin
 export EDITOR=vim
-export PAGER="/bin/sh -c \"unset PAGER;col -b -x | \
-    vim -R -c 'set ft=man nomod nolist' -c 'map q :q<CR>' \
-    -c 'map <SPACE> <C-D>' -c 'map b <C-U>' \
-    -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
+export PAGER="less -R"
+# man pages in neovim's built-in reader: keeps bold/underline/headings, K follows references, q quits.
+# (the old vim pager ran `col -b` first, which stripped the formatting before vim saw it.)
+export MANPAGER="nvim +Man!"
+# git log/diff/show in read-only vim with git syntax (see the script for keys)
+export GIT_PAGER=~/.scripts/vimpager.sh
 export GPG_TTY=$(tty)
 export BAT_PAGER="less -REF"
 
@@ -101,10 +100,7 @@ setopt inc_append_history
 setopt appendhistory autocd nomatch
 zmodload zsh/mathfunc
 
-# Disable beeps
-if [ "$(uname)" != "Darwin" ]; then
-  xset -b
-fi
+# Disable beeps (kitty has its own audio bell off too)
 unsetopt beep
 
 # Stolen
@@ -137,6 +133,12 @@ else
 fi 
 
 alias diff="colordiff"
+
+# wayland replacements for x11 muscle memory (2026-10-31)
+alias feh='swayimg'
+maim() {   # maim [-s] [out.png]: grim, -s selects a region, no file = stdout
+  if [ "$1" = -s ]; then shift; grim -g "$(slurp)" "${1:--}"; else grim "${1:--}"; fi
+}
 
 
 export NVM_DIR="$HOME/.nvm"

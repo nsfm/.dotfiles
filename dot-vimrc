@@ -21,7 +21,7 @@ set noshowmode
 set statusline+=%F
 set conceallevel=0
 set directory=~/.vim/tmp
-set ttymouse=sgr
+if !has('nvim') | set ttymouse=sgr | endif   " vim-only option; nvim sources this file too
 set clipboard=unnamedplus
 set shortmess=I
 set mat=5
